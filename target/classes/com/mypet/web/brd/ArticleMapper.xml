@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mypet.web.brd.ArticleMapper">
+	 <select id="createArticle" parameterType="hashmap">
+    	${CREATE_ARTICLE}
+    </select>
+	<insert id="insertArticle" parameterType="Article">
+		INSERT INTO ARTICLES(IMG, UID, COMMENTS, MSG, TITLE, CONTENT, CATEGORY, RATING) VALUES(
+			#{img}, #{uid}, #{comments}, #{msg}, #{title}, #{content}, #{category}, #{rating}
+		)
+	</insert>
+	<select id="countArticle" resultType="int">
+		SELECT COUNT(*) FROM ARTICLES;
+	</select>
+	<select id="selectAll" resultType="Article" parameterType="Proxy">
+		SELECT A.CATEGORY AS CATEGORY, A.*
+		FROM(SELECT *
+			FROM ARTICLES
+			ORDER BY ARTICLESEQ DESC) A
+		LIMIT #{startRow}, #{pageSize};
+	</select>
+	<update id="editArticle" parameterType="Article">
+		UPDATE ARTICLE SET TITLE = #{title}, CONTENT = #{content} WHERE ARTICLESEQ LIKE #{articleseq};
+	</update>
+	<delete id="deleteArticle" parameterType="Article">
+		DELETE FROM ARTICLES WHERE ARTICLESEQ LIKE #{articleseq}
+	</delete>
+	<select id="getArticle" resultType="Article">
+    		SELECT * FROM ARTICLES
+    		WHERE ARTICLESEQ LIKE #{articleseq}
+    	</select>
+</mapper>
